@@ -1,4 +1,5 @@
 $(document).ready(function () {
+	console.log('1')
     // 從 URL 的查詢參數中提取 'school' 參數的值
     function getSchoolFromUrl() {
         const queryParams = new URLSearchParams(window.location.search);
