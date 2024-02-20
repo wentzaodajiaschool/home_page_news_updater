@@ -10,6 +10,12 @@ td {
 }
 
 @media (max-width: 768px) {
+    th{
+        font-size: 10px;
+    }
+    .dt-center {
+        font-size: 14px;
+    }
     .container {
         width: 100%;
     }
