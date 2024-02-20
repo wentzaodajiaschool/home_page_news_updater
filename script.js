@@ -1,4 +1,15 @@
 $(document).ready(function () {
+    // 從 URL 的查詢參數中提取 'school' 參數的值
+    function getSchoolFromUrl() {
+        const queryParams = new URLSearchParams(window.location.search);
+        const school = queryParams.get("school");
+		$('#table-title').html(`官方首頁訊息<span style="color:#AAA">${school}</span>`);
+        return school;
+    }
+
+	// 獲取 'school' 參數的值
+	const school = getSchoolFromUrl();
+
     //////////////////////////////////////////
     ////////////// FUNCTION  根據螢幕大小調整顯示的資料列 ///////
     function adjustPageLength() {
@@ -125,7 +136,7 @@ $(document).ready(function () {
     // 初始化 DataTables
     var table = $("#sheetTable").DataTable({
         ajax: {
-            url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=read",
+            url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=read&school="+school,
             beforeSend: function () {
                 $("#loadStatus")
                     .html('<i class="fas fa-spinner fa-spin"></i> 載入中...')
@@ -229,7 +240,7 @@ $(document).ready(function () {
         // 呼叫 Google Script 進行更新
         // 注意: 根據您的 updateRecord 實現，您可能需要將布林值轉換為對應的字串值
         $.ajax({
-            url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update",
+            url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update&school="+school,
             method: "POST",
             data: {
                 action: "update",
@@ -288,7 +299,7 @@ $(document).ready(function () {
 
                 // 發送 AJAX 請求來刪除紀錄
                 $.ajax({
-                    url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=delete",
+                    url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=delete&school="+school,
                     method: "POST",
                     data: {
                         action: "delete",
@@ -310,13 +321,13 @@ $(document).ready(function () {
                         }, 1000); // 2秒後關閉 Modal
                     },
                     error: function (xhr, status, error) {
-						alert(
-							"請告訴Roy出錯了，包含以下內容",
-							JSON.stringify(response)
-						);
-						$("#saveStatus")
-							.html('<i class="fas fa-times"></i> 刪除失敗')
-							.show();
+                        alert(
+                            "請告訴Roy出錯了，包含以下內容",
+                            JSON.stringify(response)
+                        );
+                        $("#saveStatus")
+                            .html('<i class="fas fa-times"></i> 刪除失敗')
+                            .show();
                     },
                 });
             }
@@ -366,7 +377,7 @@ $(document).ready(function () {
 
             // 發送 AJAX 請求來更新數據
             $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=create",
+                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=create&school="+school,
                 method: "POST",
                 data: updatedData,
                 success: function (response) {
@@ -424,7 +435,7 @@ $(document).ready(function () {
 
             // 發送 AJAX 請求來更新數據
             $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update",
+                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update&school="+school,
                 method: "POST",
                 data: updatedData,
                 success: function (response) {
