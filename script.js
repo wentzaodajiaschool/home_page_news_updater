@@ -1,4 +1,35 @@
 $(document).ready(function () {
+    //////////////////////////////////////////
+    ////////////// FUNCTION  根據螢幕大小調整顯示的資料列 ///////
+    function adjustPageLength() {
+        // 獲取窗口的長寬比
+        var aspectRatio = window.innerWidth / window.innerHeight;
+        var pageLength;
+
+        // 定義不同長寬比下的 pageLength 設定
+        if (aspectRatio > 1.5) {
+            // 桌面電腦通常有更大的長寬比
+            pageLength = 8; // 桌面顯示更多列
+        } else if (aspectRatio > 1 && aspectRatio <= 1.5) {
+            // 平板或寬屏手機
+            pageLength = 12; // 中等數量的列
+        } else {
+            // 手機等狹長屏幕
+            pageLength = 16; // 顯示較少的列
+        }
+
+        // 更新 DataTables 的 pageLength
+        var table = $("#sheetTable").DataTable();
+        table.page.len(pageLength).draw(); // 使用 draw(false) 避免重繪整個表格
+        console.log(
+            "Adjusted page length to: " +
+                pageLength +
+                " based on aspect ratio: " +
+                aspectRatio
+        );
+    }
+
+    ////////////////////////////////////////
     ////////////// FUNCTION  過濾器功能 /////
     var filterEnabled = false; // 過濾器開關的狀態
 
@@ -75,9 +106,6 @@ $(document).ready(function () {
             });
     }
 
-    /////////////////////////////////////////
-    /////////////////////////////////////////
-
     // 手動重新加載 DataTables 數據時顯示載入提示
     function reloadTableData() {
         // 顯示載入中提示
@@ -94,6 +122,7 @@ $(document).ready(function () {
         });
     }
 
+    // 初始化 DataTables
     var table = $("#sheetTable").DataTable({
         ajax: {
             url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=read",
@@ -116,12 +145,11 @@ $(document).ready(function () {
                     "<button class='btn editBtn'><i class='fas fa-edit'></i></button>",
                 orderable: false,
             },
-            { data: "id",
-			responsivePriority: 1 },
+            { data: "id", responsivePriority: 1 },
             {
                 data: "theme",
                 orderable: false,
-				responsivePriority: 1
+                responsivePriority: 1,
             },
             {
                 data: "title",
@@ -134,7 +162,7 @@ $(document).ready(function () {
             {
                 data: "imageLink",
                 orderable: false,
-				responsivePriority: 2,
+                responsivePriority: 2,
                 render: function (data, type, row) {
                     // 檢查是否有有效的圖片連結，如果沒有，可以返回一個預設圖片或空字符串
                     if (data) {
@@ -160,28 +188,31 @@ $(document).ready(function () {
                     }" ${data ? "checked" : ""}>`;
                 },
                 orderable: false,
-				responsivePriority: 1
+                responsivePriority: 1,
             },
         ],
         columnDefs: [
-			{ targets: "_all", className: "dt-center" },
-
-		],
+            {
+                targets: "_all",
+                className: "dt-center",
+            },
+        ],
         language: {
-            url: "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Chinese-traditional.json",
+            url: "zh_Hant.json",
         },
-        pageLength: 5, // 預設每頁顯示數量
+        pageLength: 6, // 預設每頁顯示數量
         lengthChange: false, // 不顯示條目數量選擇器
         pagingType: "numbers", // 分頁按鈕顯示方式
-        info: false, // 不顯示分頁資訊
+        // info: false, // 不顯示分頁資訊
         drawCallback: function (settings) {
             // 為分頁按鈕添加 Bootstrap 風格
             // $('.paginate_button').addClass('btn btn-primary').removeClass('paginate_button');
             $(".dataTables_paginate").addClass("text-center"); // 確保分頁按鈕容器是置中的
         },
-		responsive: true, // 啟用響應式設計
+        responsive: true, // 啟用響應式設計
     });
 
+    // 處理表格中checkbox的事件
     $("#sheetTable tbody").on("change", ".dt-checkbox", function () {
         $("#loadStatus")
             .html('<i class="fas fa-spinner fa-spin"></i> 更新中...')
@@ -222,6 +253,7 @@ $(document).ready(function () {
         });
     });
 
+    // 處理表格中編輯按鈕的事件
     $("#sheetTable tbody").on("click", ".editBtn", function () {
         setModalToUpdateMode();
         $("#deleteBtn").show();
@@ -242,6 +274,7 @@ $(document).ready(function () {
         $("#editModal").modal("show");
     });
 
+    // 處理表格中新增按鈕的事件
     $("#addNewBtn").on("click", function () {
         // 清空 Modal 表單中的所有輸入欄位
         $("#editForm")
@@ -268,9 +301,53 @@ $(document).ready(function () {
         $("#editModalLabel").text("新增資料");
 
         // 新增數據的邏輯 TODO:
-        $("#addNewBtn-send").on("click", function () {});
+        $("#addNewBtn-send").on("click", function () {
+            var updatedData = {
+                theme: $("#topicField").val(),
+                title: $("#titleField").val(),
+                subtitle: $("#subtitleField").val(),
+                imageLink: $("#imageLinkField").val(),
+                articleLink: $("#articleLinkField").val(),
+                enabled: $("#enabledField").is(":checked") ? "true" : "false",
+            };
+
+            $("#saveStatus")
+                .html('<i class="fas fa-spinner fa-spin"></i> 儲存中...')
+                .show();
+
+            // 發送 AJAX 請求來更新數據
+            $.ajax({
+                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update",
+                method: "POST",
+                data: updatedData,
+                success: function (response) {
+                    // 更新提示為「完成」
+                    $("#saveStatus").html('<i class="fas fa-check"></i> 完成!');
+                    $("#saveStatus").hide();
+                    $("#editModal").modal("hide");
+                    // alert(JSON.stringify(response));
+                    // 短暫延時後自動關閉 Modal
+                    // 可能需要重新加載 DataTables 數據
+                    reloadTableData();
+                    setTimeout(function () {
+                        $("#editModal").modal("hide");
+                    }, 1000); // 2秒後關閉 Modal
+                },
+                error: function (response) {
+                    alert(
+                        "請告訴Roy出錯了，包含以下內容",
+                        JSON.stringify(response)
+                    );
+                    $("#saveStatus")
+                        .html('<i class="fas fa-times"></i> 儲存失敗')
+                        .show();
+                    // table.ajax.reload(); // 重新加載 DataTables
+                },
+            });
+        });
     }
 
+    // 設置 Modal 為「更新模式」
     function setModalToUpdateMode() {
         // 設置更新按鈕
         var updateButtonHtml =
@@ -327,4 +404,7 @@ $(document).ready(function () {
             });
         });
     }
+
+    // 調整資料列顯示數量
+    $(window).resize(adjustPageLength); // 窗口大小變化時重新調整
 });

@@ -5,13 +5,13 @@ td {
     text-overflow: ellipsis;
 }
 
-.dataTables_wrapper .dataTables_paginate  {
-    float: none; /* 將分頁按鈕置中 */
-}
+/* .dataTables_wrapper .dataTables_paginate  {
+    float: none;
+} */
 
 @media (max-width: 768px) {
     th{
-        font-size: 10px;
+        font-size: 3px;
     }
     .dt-center {
         font-size: 14px;
