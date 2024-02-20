@@ -272,6 +272,55 @@ $(document).ready(function () {
 
         // 顯示 Modal
         $("#editModal").modal("show");
+
+        // 監聽刪除按鈕的點擊事件
+        $("#deleteBtn").on("click", function () {
+            if (
+                confirm(
+                    "確定要刪除ID為 " +
+                        $("#recordId").data("id") +
+                        " 的紀錄嗎？"
+                )
+            ) {
+                $("#saveStatus")
+                    .html('<i class="fas fa-spinner fa-spin"></i> 刪除中...')
+                    .show();
+
+                // 發送 AJAX 請求來刪除紀錄
+                $.ajax({
+                    url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=delete",
+                    method: "POST",
+                    data: {
+                        action: "delete",
+                        id: $("#recordId").data("id"),
+                    },
+                    success: function (response) {
+                        // 更新提示為「完成」
+                        $("#saveStatus").html(
+                            '<i class="fas fa-check"></i> 完成!'
+                        );
+                        $("#saveStatus").hide();
+                        $("#editModal").modal("hide");
+                        // alert(JSON.stringify(response));
+                        // 短暫延時後自動關閉 Modal
+                        // 可能需要重新加載 DataTables 數據
+                        reloadTableData();
+                        setTimeout(function () {
+                            $("#editModal").modal("hide");
+                        }, 1000); // 2秒後關閉 Modal
+                    },
+                    error: function (xhr, status, error) {
+						alert(
+							"請告訴Roy出錯了，包含以下內容",
+							JSON.stringify(response)
+						);
+						$("#saveStatus")
+							.html('<i class="fas fa-times"></i> 刪除失敗')
+							.show();
+                    },
+                });
+            }
+        });
     });
 
     // 處理表格中新增按鈕的事件
@@ -317,7 +366,7 @@ $(document).ready(function () {
 
             // 發送 AJAX 請求來更新數據
             $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update",
+                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=create",
                 method: "POST",
                 data: updatedData,
                 success: function (response) {

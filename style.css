@@ -26,6 +26,8 @@ td {
     bottom: 20px; /* 距離視窗底部的距離 */
     right: 20px; /* 距離視窗左側的距離 */
     z-index: 1000; /* 確保漂浮的 div 能夠顯示在其他內容之上 */
+    text-align: center; /* 水平居中 */
+    vertical-align: middle; /* 垂直居中 */
 }
 .table {
     border-top: 1px solid #dee2e6; /* Bootstrap 預設的邊界樣式 */
