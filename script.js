@@ -3,12 +3,14 @@ $(document).ready(function () {
     function getSchoolFromUrl() {
         const queryParams = new URLSearchParams(window.location.search);
         const school = queryParams.get("school");
-		$('#table-title').html(`官方首頁訊息<span style="color:#AAA">${school}</span>`);
+        $("#table-title").html(
+            `官方首頁訊息<span style="color:#AAA">${school}</span>`
+        );
         return school;
     }
 
-	// 獲取 'school' 參數的值
-	const school = getSchoolFromUrl();
+    // 獲取 'school' 參數的值
+    const school = getSchoolFromUrl();
 
     //////////////////////////////////////////
     ////////////// FUNCTION  根據螢幕大小調整顯示的資料列 ///////
@@ -104,6 +106,10 @@ $(document).ready(function () {
             .then((result) => {
                 if (result.success) {
                     $("#imageLinkField").val(result.data.link);
+					$("#upload-display").removeAttr('hidden');
+					$("#upload-display").html(`
+						<img src="${result.data.link}" style="width: w-100; height: auto;">
+					`)
                     $("#saveStatus")
                         .html('<i class="fas fa-check"></i>完成')
                         .fadeOut(1000);
@@ -136,7 +142,9 @@ $(document).ready(function () {
     // 初始化 DataTables
     var table = $("#sheetTable").DataTable({
         ajax: {
-            url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=read&school="+school,
+            url:
+                "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=read&school=" +
+                school,
             beforeSend: function () {
                 $("#loadStatus")
                     .html('<i class="fas fa-spinner fa-spin"></i> 載入中...')
@@ -240,7 +248,9 @@ $(document).ready(function () {
         // 呼叫 Google Script 進行更新
         // 注意: 根據您的 updateRecord 實現，您可能需要將布林值轉換為對應的字串值
         $.ajax({
-            url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update&school="+school,
+            url:
+                "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update&school=" +
+                school,
             method: "POST",
             data: {
                 action: "update",
@@ -275,6 +285,10 @@ $(document).ready(function () {
         $("#titleField").val(data.title);
         $("#subtitleField").val(data.subtitle);
         $("#imageLinkField").val(data.imageLink);
+		$("#upload-display").removeAttr('hidden');
+		$("#upload-display").html(`
+			<img src="${data.imageLink}" style="width: w-100; height: auto;">
+		`)
         $("#articleLinkField").val(data.articleLink);
         $("#enabledField").prop(
             "checked",
@@ -299,7 +313,9 @@ $(document).ready(function () {
 
                 // 發送 AJAX 請求來刪除紀錄
                 $.ajax({
-                    url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=delete&school="+school,
+                    url:
+                        "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=delete&school=" +
+                        school,
                     method: "POST",
                     data: {
                         action: "delete",
@@ -350,6 +366,32 @@ $(document).ready(function () {
         setModalToAddMode();
     });
 
+    function checkDataComplete() {
+        // 檢查 'theme' 和 'imageLink' 字段是否為空
+		var theme = $("#topicField").val();
+		var imageLink = $("#imageLinkField").val();
+		var isValid = true;
+	
+		// 移除先前的错误提示
+		$("#topicField, #imageLinkField").removeClass("input-error");
+	
+		if (!theme) {
+			$("#topicField").addClass("input-error");
+			isValid = false;
+		}
+		if (!imageLink) {
+			$("#imageLinkField").addClass("input-error");
+			isValid = false;
+		}
+
+        if (!isValid) {
+            // 如果 'theme' 或 'imageLink' 為空，則顯示警告框並終止函數執行
+            alert("「主題」和「圖片連結」字段不能為空！");
+            return false;
+        }
+        return true;
+    }
+
     // 設置 Modal 為「新增模式」
     function setModalToAddMode() {
         // 設置新增按鈕
@@ -362,6 +404,10 @@ $(document).ready(function () {
 
         // 新增數據的邏輯 TODO:
         $("#addNewBtn-send").on("click", function () {
+            // 若檢查不完整，則不執行新增
+            if (!checkDataComplete()) {
+                return;
+            }
             var updatedData = {
                 theme: $("#topicField").val(),
                 title: $("#titleField").val(),
@@ -377,7 +423,9 @@ $(document).ready(function () {
 
             // 發送 AJAX 請求來更新數據
             $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=create&school="+school,
+                url:
+                    "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=create&school=" +
+                    school,
                 method: "POST",
                 data: updatedData,
                 success: function (response) {
@@ -419,6 +467,10 @@ $(document).ready(function () {
 
         // 更新數據的邏輯
         $("#updateBtn").on("click", function () {
+            // 若檢查不完整，則不執行更新
+            if (!checkDataComplete()) {
+                return;
+            }
             var updatedData = {
                 id: $("#recordId").data("id"),
                 theme: $("#topicField").val(),
@@ -435,7 +487,9 @@ $(document).ready(function () {
 
             // 發送 AJAX 請求來更新數據
             $.ajax({
-                url: "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update&school="+school,
+                url:
+                    "https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=update&school=" +
+                    school,
                 method: "POST",
                 data: updatedData,
                 success: function (response) {

@@ -41,3 +41,7 @@ td {
     text-align: center; /* 水平居中 */
     vertical-align: middle; /* 垂直居中 */
 }
+
+.input-error {
+    border-color: red !important;
+}
