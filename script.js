@@ -1,6 +1,6 @@
 $(document).ready(function () {
-	console.log('1')
-    // 從 URL 的查詢參數中提取 'school' 參數的值
+    console.log("2");
+    //  FUNCTION  從 URL 的查詢參數中提取 'school' 參數的值
     function getSchoolFromUrl() {
         const queryParams = new URLSearchParams(window.location.search);
         const school = queryParams.get("school");
@@ -13,8 +13,7 @@ $(document).ready(function () {
     // 獲取 'school' 參數的值
     const school = getSchoolFromUrl();
 
-    //////////////////////////////////////////
-    ////////////// FUNCTION  根據螢幕大小調整顯示的資料列 ///////
+    //  FUNCTION  根據螢幕大小調整顯示的資料列
     function adjustPageLength() {
         // 獲取窗口的長寬比
         var aspectRatio = window.innerWidth / window.innerHeight;
@@ -43,8 +42,7 @@ $(document).ready(function () {
         );
     }
 
-    ////////////////////////////////////////
-    ////////////// FUNCTION  過濾器功能 /////
+    //  FUNCTION  過濾器功能
     var filterEnabled = false; // 過濾器開關的狀態
 
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
@@ -65,19 +63,20 @@ $(document).ready(function () {
         return isChecked; // 根據 checkbox 的選中狀態過濾行
     });
 
+	//  EVENT  過濾器開關按鈕
     $("#toggleFilterBtn").on("click", function () {
         filterEnabled = !filterEnabled; // 切換過濾器的啟用狀態
         $("#sheetTable").DataTable().draw(); // 重新繪製表格以應用過濾
     });
-    //////////////////////////////////////////
-    ////////////// FUNCTION  圖片上傳功能 /////
-    //////////////////////////////////////////
+    
+    //  EVENT  圖片上傳功能 /////
     //當點擊加號按鈕時，觸發隱藏的文件輸入的點擊事件
     $("#triggerUploadButton").on("click", function () {
         $("#fileInput").click();
     });
 
     // 處理文件選擇後的事件
+	//  EVENT 
     $("#fileInput").on("change", function () {
         // 這裡可以預留上傳邏輯
         if (this.files && this.files[0]) {
@@ -86,6 +85,7 @@ $(document).ready(function () {
         }
     });
 
+	//  FUNCTION  上傳圖片到 Imgur
     function uploadImageToImgur(file) {
         console.log("uploadImageToImgur");
         // 顯示上傳中提示
@@ -107,10 +107,11 @@ $(document).ready(function () {
             .then((result) => {
                 if (result.success) {
                     $("#imageLinkField").val(result.data.link);
-					$("#upload-display").removeAttr('hidden');
-					$("#upload-display").html(`
-						<img src="${result.data.link}" style="width: w-100; height: auto;">
-					`)
+                    // 顯示圖片
+                    $("#upload-display").removeAttr("hidden");
+                    $("#upload-display").html(`
+						<img src="${result.data.link}" style="width: 100%; height: auto;">
+					`);
                     $("#saveStatus")
                         .html('<i class="fas fa-check"></i>完成')
                         .fadeOut(1000);
@@ -124,7 +125,7 @@ $(document).ready(function () {
             });
     }
 
-    // 手動重新加載 DataTables 數據時顯示載入提示
+    //  FUNCTION  手動重新加載 DataTables 數據時顯示載入提示
     function reloadTableData() {
         // 顯示載入中提示
         $("#loadStatus")
@@ -232,7 +233,7 @@ $(document).ready(function () {
         responsive: true, // 啟用響應式設計
     });
 
-    // 處理表格中checkbox的事件
+    //  EVENT  處理表格中checkbox的事件
     $("#sheetTable tbody").on("change", ".dt-checkbox", function () {
         $("#loadStatus")
             .html('<i class="fas fa-spinner fa-spin"></i> 更新中...')
@@ -275,7 +276,7 @@ $(document).ready(function () {
         });
     });
 
-    // 處理表格中編輯按鈕的事件
+    //  EVENT  處理表格中編輯按鈕的事件
     $("#sheetTable tbody").on("click", ".editBtn", function () {
         setModalToUpdateMode();
         $("#deleteBtn").show();
@@ -286,10 +287,11 @@ $(document).ready(function () {
         $("#titleField").val(data.title);
         $("#subtitleField").val(data.subtitle);
         $("#imageLinkField").val(data.imageLink);
-		$("#upload-display").removeAttr('hidden');
-		$("#upload-display").html(`
-			<img src="${data.imageLink}" style="width: w-100; height: auto;">
-		`)
+        // 顯示圖片
+        $("#upload-display").removeAttr("hidden");
+        $("#upload-display").html(`
+			<img src="${data.imageLink}" style="width: 100%; height: auto;">
+		`);
         $("#articleLinkField").val(data.articleLink);
         $("#enabledField").prop(
             "checked",
@@ -351,7 +353,7 @@ $(document).ready(function () {
         });
     });
 
-    // 處理表格中新增按鈕的事件
+    //   EVENT  處理表格中新增按鈕的事件
     $("#addNewBtn").on("click", function () {
         // 清空 Modal 表單中的所有輸入欄位
         $("#editForm")
@@ -367,23 +369,24 @@ $(document).ready(function () {
         setModalToAddMode();
     });
 
+	//  FUNCTION  檢查 Modal 表單是否完整
     function checkDataComplete() {
         // 檢查 'theme' 和 'imageLink' 字段是否為空
-		var theme = $("#topicField").val();
-		var imageLink = $("#imageLinkField").val();
-		var isValid = true;
-	
-		// 移除先前的错误提示
-		$("#topicField, #imageLinkField").removeClass("input-error");
-	
-		if (!theme) {
-			$("#topicField").addClass("input-error");
-			isValid = false;
-		}
-		if (!imageLink) {
-			$("#imageLinkField").addClass("input-error");
-			isValid = false;
-		}
+        var theme = $("#topicField").val();
+        var imageLink = $("#imageLinkField").val();
+        var isValid = true;
+
+        // 移除先前的错误提示
+        $("#topicField, #imageLinkField").removeClass("input-error");
+
+        if (!theme) {
+            $("#topicField").addClass("input-error");
+            isValid = false;
+        }
+        if (!imageLink) {
+            $("#imageLinkField").addClass("input-error");
+            isValid = false;
+        }
 
         if (!isValid) {
             // 如果 'theme' 或 'imageLink' 為空，則顯示警告框並終止函數執行
@@ -393,7 +396,7 @@ $(document).ready(function () {
         return true;
     }
 
-    // 設置 Modal 為「新增模式」
+    //  FUNCTION  設置 Modal 為「新增模式」
     function setModalToAddMode() {
         // 設置新增按鈕
         var addButtonHtml =
@@ -456,7 +459,7 @@ $(document).ready(function () {
         });
     }
 
-    // 設置 Modal 為「更新模式」
+    //  FUNCTION  設置 Modal 為「更新模式」
     function setModalToUpdateMode() {
         // 設置更新按鈕
         var updateButtonHtml =
