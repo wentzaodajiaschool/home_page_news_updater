@@ -211,7 +211,7 @@ $(document).ready(function () {
                 enabled: isEnabled ? "true" : "false", // 根據您的Google Script預期的格式調整
             },
             success: function (response) {
-                alert(JSON.stringify(response));
+                // alert(JSON.stringify(response));
                 // 可能需要重新加載或更新 DataTables 來顯示最新的數據
                 reloadTableData();
             },

@@ -35,7 +35,7 @@ td {
     margin-bottom: 20px; /* 調整這個值來增加你想要的間距大小 */
 }
 
-#sheetTable th {
+#sheetTable th, #sheetTable td {
     text-align: center; /* 水平居中 */
     vertical-align: middle; /* 垂直居中 */
 }
