@@ -110,7 +110,7 @@ $(document).ready(function () {
                     // 顯示圖片
                     $("#upload-display").removeAttr("hidden");
                     $("#upload-display").html(`
-						<img src="${result.data.link}" style="width: 100%; height: auto;">
+						<img src="${result.data.link}">
 					`);
                     $("#saveStatus")
                         .html('<i class="fas fa-check"></i>完成')
@@ -290,7 +290,7 @@ $(document).ready(function () {
         // 顯示圖片
         $("#upload-display").removeAttr("hidden");
         $("#upload-display").html(`
-			<img src="${data.imageLink}" style="width: 100%; height: auto;">
+			<img src="${data.imageLink}">
 		`);
         $("#articleLinkField").val(data.articleLink);
         $("#enabledField").prop(

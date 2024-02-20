@@ -23,8 +23,8 @@ td {
 
 .floating-div {
     position: fixed; /* 使用固定定位 */
-    bottom: 20px; /* 距離視窗底部的距離 */
-    right: 20px; /* 距離視窗左側的距離 */
+    top: 20px; /* 距離視窗頂部的距離 */
+    right: 20px; /* 距離視窗右側的距離 */
     z-index: 1000; /* 確保漂浮的 div 能夠顯示在其他內容之上 */
     text-align: center; /* 水平居中 */
     vertical-align: middle; /* 垂直居中 */
@@ -44,4 +44,12 @@ td {
 
 .input-error {
     border-color: red !important;
+}
+
+#upload-display img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    margin-top: 20px;
 }
