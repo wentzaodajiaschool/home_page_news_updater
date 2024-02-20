@@ -5,7 +5,7 @@ $(document).ready(function () {
         const queryParams = new URLSearchParams(window.location.search);
         const school = queryParams.get("school");
         $("#table-title").html(
-            `官方首頁訊息<span style="color:#AAA">${school}</span>`
+            `<b>官方首頁訊息<span style="color:#AAA">${school}</span></b>`
         );
         return school;
     }
@@ -63,12 +63,12 @@ $(document).ready(function () {
         return isChecked; // 根據 checkbox 的選中狀態過濾行
     });
 
-	//  EVENT  過濾器開關按鈕
+    //  EVENT  過濾器開關按鈕
     $("#toggleFilterBtn").on("click", function () {
         filterEnabled = !filterEnabled; // 切換過濾器的啟用狀態
         $("#sheetTable").DataTable().draw(); // 重新繪製表格以應用過濾
     });
-    
+
     //  EVENT  圖片上傳功能 /////
     //當點擊加號按鈕時，觸發隱藏的文件輸入的點擊事件
     $("#triggerUploadButton").on("click", function () {
@@ -76,7 +76,7 @@ $(document).ready(function () {
     });
 
     // 處理文件選擇後的事件
-	//  EVENT 
+    //  EVENT
     $("#fileInput").on("change", function () {
         // 這裡可以預留上傳邏輯
         if (this.files && this.files[0]) {
@@ -85,7 +85,7 @@ $(document).ready(function () {
         }
     });
 
-	//  FUNCTION  上傳圖片到 Imgur
+    //  FUNCTION  上傳圖片到 Imgur
     function uploadImageToImgur(file) {
         console.log("uploadImageToImgur");
         // 顯示上傳中提示
@@ -369,7 +369,7 @@ $(document).ready(function () {
         setModalToAddMode();
     });
 
-	//  FUNCTION  檢查 Modal 表單是否完整
+    //  FUNCTION  檢查 Modal 表單是否完整
     function checkDataComplete() {
         // 檢查 'theme' 和 'imageLink' 字段是否為空
         var theme = $("#topicField").val();
@@ -405,6 +405,11 @@ $(document).ready(function () {
 
         // 重置 Modal 標題為「新增資料」
         $("#editModalLabel").text("新增資料");
+
+		// 重置 Modal 圖片
+        $("#upload-display").html(`
+			<img src="https://i.imgur.com/ELtJ86C.png">
+		`);
 
         // 新增數據的邏輯 TODO:
         $("#addNewBtn-send").on("click", function () {

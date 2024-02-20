@@ -53,47 +53,51 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="modal-body">
-                        <form id="editForm">
-                            <input type="hidden" id="recordId">
-                            <div class="mb-3">
-                                <label for="topicField" class="form-label">主題</label>
-                                <input type="text" class="form-control" id="topicField" required placeholder="說明用途">
-                            </div>
-                            <div class="mb-3">
-                                <label for="titleField" class="form-label">標題</label>
-                                <input type="text" class="form-control" id="titleField" placeholder="顯示在圖上的大標題">
-                            </div>
-                            <div class="mb-3">
-                                <label for="subtitleField" class="form-label">副標題</label>
-                                <input type="text" class="form-control" id="subtitleField" placeholder="小標題">
-                            </div>
-                            <div class="mb-3">
-                                <label for="imageLinkField" class="form-label">圖片連結</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="imageLinkField" required
-                                        placeholder="長寬比4:3">
-                                    <button class="btn btn-outline-secondary" type="button" id="triggerUploadButton">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                    <!-- 添加屬性只接受jpg和png -->
-                                    <input type="file" id="fileInput" accept="image/png, image/jpeg"
-                                        style="display: none;" />
+                    <form id="editForm">
+                        <input type="hidden" id="recordId">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="topicField" class="form-label">主題</label>
+                                    <input type="text" class="form-control" id="topicField" required placeholder="說明用途">
                                 </div>
-                                <div id="upload-display" hidden></div>
+                                <div class="mb-3">
+                                    <label for="titleField" class="form-label">標題</label>
+                                    <input type="text" class="form-control" id="titleField" placeholder="顯示在圖上的大標題">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subtitleField" class="form-label">副標題</label>
+                                    <input type="text" class="form-control" id="subtitleField" placeholder="小標題">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="articleLinkField" class="form-label">文章連結</label>
+                                    <input type="text" class="form-control" id="articleLinkField" placeholder="進一步的說明網址">
+                                </div>
                             </div>
-
-                            <div class="mb-3">
-                                <label for="articleLinkField" class="form-label">文章連結</label>
-                                <input type="text" class="form-control" id="articleLinkField" placeholder="進一步的說明網址">
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="imageLinkField" class="form-label">圖片連結</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="imageLinkField" required
+                                            placeholder="長寬比4:3">
+                                        <button class="btn btn-outline-secondary" type="button" id="triggerUploadButton">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                        <!-- 添加屬性只接受jpg和png -->
+                                        <input type="file" id="fileInput" accept="image/png, image/jpeg"
+                                            style="display: none;" />
+                                    </div>
+                                    <div id="upload-display">
+                                        <img src="https://i.imgur.com/ELtJ86C.png">
+                                    </div>
+                                </div>
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="enabledField">
+                                    <label class="form-check-label" for="enabledField">是否啟用</label>
+                                </div>
                             </div>
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="enabledField">
-                                <label class="form-check-label" for="enabledField">是否啟用</label>
-                            </div>
-                        </form>
-                    </div>
-
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <span id="saveStatus" class="me-auto text-success" style="display: none;"></span>
