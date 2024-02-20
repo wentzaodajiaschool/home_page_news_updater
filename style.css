@@ -1,0 +1,16 @@
+td {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dataTables_wrapper .dataTables_paginate  {
+    float: none; /* 將分頁按鈕置中 */
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+}
