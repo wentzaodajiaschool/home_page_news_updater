@@ -221,7 +221,7 @@ $(document).ready(function () {
         language: {
             url: "zh_Hant.json",
         },
-        pageLength: 6, // 預設每頁顯示數量
+        pageLength: 8, // 預設每頁顯示數量
         lengthChange: false, // 不顯示條目數量選擇器
         pagingType: "numbers", // 分頁按鈕顯示方式
         // info: false, // 不顯示分頁資訊

@@ -53,3 +53,14 @@ td {
     border-radius: 15px;
     margin-top: 20px;
 }
+
+/* 調整 DataTables 表格的字體大小 */
+.dataTables_wrapper .dataTable td,
+.dataTables_wrapper .dataTable th {
+    font-size: 12px; /* 將字體大小調整為 12px */
+}
+
+/* 調整表格內邊距 */
+.dataTables_wrapper .dataTable td {
+    padding: 4px; /* 調整內邊距為 4px */
+}
