@@ -15,14 +15,6 @@ $(document).ready(function () {
         $("#table-title").html(`<b>官方首頁訊息</b>`);
     }
     
-    // 校區切換事件
-    $("#schoolSelector").on("change", function() {
-        school = $(this).val();
-        updateTableTitle();
-        // 重新載入資料
-        loadSheetData();
-    });
-    
     // 初始化校區選擇器
     initSchoolSelector();
 
@@ -259,6 +251,23 @@ $(document).ready(function () {
             $(".dataTables_paginate").addClass("text-center"); // 確保分頁按鈕容器是置中的
         },
         responsive: true, // 啟用響應式設計
+    });
+
+    // 校區切換事件（在DataTables初始化後）
+    $("#schoolSelector").on("change", function() {
+        school = $(this).val();
+        updateTableTitle();
+        // 顯示載入狀態
+        $("#loadStatus")
+            .html('<i class="fas fa-spinner fa-spin"></i> 載入中...')
+            .show();
+        // 更新DataTables的ajax URL並重新載入資料
+        table.ajax.url("https://script.google.com/macros/s/AKfycbzFq60A2AHhALT7GsTofF2qYrESUZtnuB1SqG2k5NS4TfMReRZ6f1mG5dA-LgoMfRK9Cw/exec?action=read&school=" + school).load(function() {
+            // 載入完成後隱藏載入狀態
+            $("#loadStatus")
+                .html('<i class="fas fa-check"></i> 完成!')
+                .fadeOut(1000);
+        });
     });
 
     //  EVENT  處理表格中checkbox的事件
