@@ -85,7 +85,7 @@ $(document).ready(function () {
         }
     });
 
-    //  FUNCTION  上傳圖片到 Imgur
+    //  FUNCTION  上傳圖片到 Imgur (透過 Cloudflare Worker 代理)
     function uploadImageToImgur(file) {
         console.log("uploadImageToImgur");
         // 顯示上傳中提示
@@ -94,12 +94,10 @@ $(document).ready(function () {
         var clientId = "a0a92307b538c2f";
         var formData = new FormData();
         formData.append("image", file);
+        formData.append("clientId", clientId);
 
-        fetch("https://api.imgur.com/3/image", {
+        fetch("https://imgurproxy.dreamdomroy.workers.dev/", {
             method: "POST",
-            headers: {
-                Authorization: "Client-ID " + clientId,
-            },
             body: formData,
             muteHttpExceptions: true,
         })
@@ -116,12 +114,12 @@ $(document).ready(function () {
                         .html('<i class="fas fa-check"></i>完成')
                         .fadeOut(1000);
                 } else {
-                    $("#saveStatus").html("上傳失敗").show();
+                    $("#saveStatus").html("上傳失敗: " + (result.error || "未知錯誤")).show();
                 }
             })
             .catch((error) => {
                 console.error("Error:", error);
-                $("#saveStatus").html("上傳失敗").show();
+                $("#saveStatus").html("上傳失敗: " + error.message).show();
             });
     }
 
