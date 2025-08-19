@@ -92,15 +92,22 @@ $(document).ready(function () {
         $("#saveStatus").html('<i class="fas fa-spinner fa-spin"></i>').show();
 
         var clientId = "a0a92307b538c2f";
-        var formData = new FormData();
-        formData.append("image", file);
-        formData.append("clientId", clientId);
 
-        fetch("https://imgurproxy.dreamdomroy.workers.dev/", {
-            method: "POST",
-            body: formData,
-            muteHttpExceptions: true,
-        })
+        // 將圖片轉換為 Base64
+        fileToBase64(file)
+            .then((base64) => {
+                return fetch("https://imgurproxy.dreamdomroy.workers.dev/", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        image: base64,
+                        clientId: clientId
+                    }),
+                    muteHttpExceptions: true,
+                });
+            })
             .then((response) => response.json())
             .then((result) => {
                 if (result.success) {
@@ -121,6 +128,16 @@ $(document).ready(function () {
                 console.error("Error:", error);
                 $("#saveStatus").html("上傳失敗: " + error.message).show();
             });
+    }
+
+    // 將檔案轉換為 Base64
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
     }
 
     //  FUNCTION  手動重新加載 DataTables 數據時顯示載入提示
