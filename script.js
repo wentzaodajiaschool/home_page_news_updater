@@ -1,17 +1,30 @@
 $(document).ready(function () {
     console.log("2");
-    //  FUNCTION  從 URL 的查詢參數中提取 'school' 參數的值
-    function getSchoolFromUrl() {
-        const queryParams = new URLSearchParams(window.location.search);
-        const school = queryParams.get("school");
-        $("#table-title").html(
-            `<b>官方首頁訊息<span style="color:#AAA">${school}</span></b>`
-        );
-        return school;
+    
+    // 設定預設校區為安親校
+    let school = "安親校";
+    
+    // 初始化校區選擇器
+    function initSchoolSelector() {
+        $("#schoolSelector").val(school);
+        updateTableTitle();
     }
-
-    // 獲取 'school' 參數的值
-    const school = getSchoolFromUrl();
+    
+    // 更新表格標題
+    function updateTableTitle() {
+        $("#table-title").html(`<b>官方首頁訊息</b>`);
+    }
+    
+    // 校區切換事件
+    $("#schoolSelector").on("change", function() {
+        school = $(this).val();
+        updateTableTitle();
+        // 重新載入資料
+        loadSheetData();
+    });
+    
+    // 初始化校區選擇器
+    initSchoolSelector();
 
     //  FUNCTION  根據螢幕大小調整顯示的資料列
     function adjustPageLength() {
